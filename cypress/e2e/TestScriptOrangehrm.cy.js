@@ -51,12 +51,9 @@ describe('OrangeHRM', () => {
     .type('#Correct123');
     cy.get('button').contains('Save').should('be.visible').click();
     cy.wait(3000);
-   
     cy.url().should('contain','pim/viewPersonalDetails');
-    // 
-    // cy.get('nav[aria-label="Sidepanel"]').contains('My Info').click();
     cy.get('.orangehrm-card-container').should('contain','Personal Details');
-
+  
  var firstName = '';
  var lastName = '';
 cy.wait(3000);
@@ -117,7 +114,7 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
    pageObject1.searchandDeleteSystemUsers('Takow');
     
   })
-  it.only(' Search/edit & Search/delete Admin System Users',()=>{
+  it(' Search/edit & Search/delete Admin System Users',()=>{
    pageObject1.login('Admin','admin123')
    // Search/edit Admin System Users
    pageObject1.accessSidepanel('Admin','Admin')
@@ -148,21 +145,16 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.get('div[role="document"]').should('be.visible');
     cy.get('button').contains('Ok').click();
   })
-  it.only('Add Customer',()=>{
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
-    cy.get('nav[aria-label="Sidepanel"]').contains('Time').click();
-    cy.get('.oxd-topbar-header-breadcrumb').should('contain','Time');
+  it('Add Customer',()=>{
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('Time','Time');
     cy.get('.oxd-topbar-body-nav-tab-item').contains('Project Info ').click();
     cy.get('ul[role="menu"]').contains('Customers').click();
     cy.url().should('contain','time/viewCustomers');
     cy.get('.orangehrm-header-container').should('be.visible').and('contain','Customers');
     cy.get('.oxd-button').click();
     cy.get(':nth-child(2) > .oxd-input').type('AAAAA');
-    // cy.get('textarea[placeholder="Type description here"]').type('contractor');
+    cy.get('textarea[placeholder="Type description here"]').type('contractor');
     cy.get('.oxd-button--secondary').contains('Save').click();
    // cy.url().should('contain','time/viewCustomer');
  })
@@ -171,87 +163,88 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
  })
  it('Add recruitment candidate',()=>{
     pageObject1.login('Admin','admin123');
-
+    pageObject1.accessSidepanel('Recruitment','Recruitment');
+    cy.get('button').contains(' Add ').click();
+    cy.wait(1000);
+    cy.url().should('contain','recruitment/addCandidate');
+    cy.get('.orangehrm-card-container').should('contain','Add Candidate');
+    cy.get('input[name="firstName"]').type('Paul');
+    cy.get('input[name="lastName"]').type('Ddddd');
+    cy.get('div[class="oxd-select-text-input"]').contains('Select').click({ force: true });
+    cy.get('div[role = "listbox"]').contains('IT').click();
+    cy.get(':nth-child(3) > .oxd-grid-3 > :nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-input').type('PD@mail.com');
+    cy.get('.oxd-grid-3 > :nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').type('123456');
+    cy.get('.oxd-checkbox-input > .oxd-icon').click();
+    cy.get('.oxd-button--secondary').contains('Save').click();
+    cy.wait(1000);
+    cy.get('.orangehrm-card-container').should('contain','Application Stage');
+    })
+    it('Unsuccesful trails to Access Maintenance page trial)',()=>{
+    //Unsuccessful access trial 1
+     pageObject1.login('Admin','admin123');
+     cy.get('nav[aria-label="Sidepanel"]').contains('Maintenance').click();
+     cy.get('button').contains('Confirm').should('be.visible').click();
+     cy.get('.oxd-input-group > .oxd-text').should('be.visible').and('contain','Required');
+     //unsuccesful access trial 2
+     cy.get('input[name="password"]').type('1234');
+     cy.get('button').contains('Confirm').should('be.visible').click();
+     cy.get('.oxd-alert').should('be.visible').and('contain','Invalid credentials');
  })
+  it('Access Maintenance page ',()=>{
+    pageObject1.login('Admin','admin123');
+    cy.get('nav[aria-label="Sidepanel"]').contains('Maintenance').click();
+    cy.get('input[name="password"]').type('admin123');
+    cy.get('button').contains('Confirm').should('be.visible').click();
+    cy.wait(1000);
+    cy.get('.oxd-topbar-header-breadcrumb').should('contain','Maintenance');
+  })
+  it('Post new Buzz Newsfeed',()=>{
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('Buzz','Buzz');
+    cy.get('.oxd-buzz-post-input').type('New Buzz');
+    cy.get('button').contains('Post').should('be.visible').click();
+    cy.get('.oxd-grid-1 > :nth-child(1) > .oxd-sheet').should('be.visible');
+  })
+  it('Edit and Delete new Buzz Newsfeed',()=>{
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('Buzz','Buzz');
+    //Edit new Buzz Newsfeed
+    cy.get(':nth-child(1) > .oxd-sheet > .orangehrm-buzz-post > .orangehrm-buzz-post-header > .orangehrm-buzz-post-header-config > li > .oxd-icon-button > .oxd-icon')
+    .click({force:true});
+    cy.get('.oxd-dropdown-menu > :nth-child(2)').click();
+    cy.get('.oxd-dialog-container-default--inner > .oxd-sheet').should('be.visible').and('contain','Edit');
+    cy.get('.orangehrm-buzz-post-modal-header-text > .oxd-buzz-post > .oxd-buzz-post-input').clear().type('Edit Buzz');
+    cy.get('.oxd-form-actions > .oxd-button').should('be.visible').click();
+    cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/div[1]/div[3]/div[1]/div[1]/div[2]/div[1]/p[1]").should('be.visible');
+    //Delete new Buzz Newsfeed
+    cy.wait(1000);
+    cy.get(':nth-child(1) > .oxd-sheet > .orangehrm-buzz-post > .orangehrm-buzz-post-header > .orangehrm-buzz-post-header-config > li > .oxd-icon-button > .oxd-icon')
+    .click({force:true});
+    cy.get('.oxd-dropdown-menu > :nth-child(1)').click();
+    cy.get('.oxd-dialog-container-default--inner > .oxd-sheet').should('be.visible');
+    cy.get('.oxd-button--label-danger').click();
+  })
+  it.only('Comment on post',()=>{
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('Buzz','Buzz');
+    cy.get(':nth-child(1) > .oxd-sheet > .orangehrm-buzz-post-footer > .orangehrm-buzz-post-actions > :nth-child(2) > .oxd-icon')
+    .click({force:true});
+    cy.get('input[placeholder="Write your comment..."]').type('Great!!!!').type('{enter}');
+  })
+  it.only('Edit and Delete posted comment',()=>{
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('Buzz','Buzz');
+    //Edit Posted Comment
+    cy.get(':nth-child(1) > .oxd-sheet > .orangehrm-buzz-post-footer > .orangehrm-buzz-post-actions > :nth-child(2) > .oxd-icon')
+    .click({force:true});
+    cy.get('.orangehrm-post-comment-action-area > :nth-child(2)').first().click({force:true});
+    cy.get('.orangehrm-post-comment > .oxd-form > .oxd-input-group > :nth-child(2) > .oxd-input')
+    .clear().type('Edited comment').type('{enter}');
+    //Delete Posted Comment
+    cy.get(':nth-child(3) > .orangehrm-post-comment > .orangehrm-post-comment-action-area > :nth-child(3)')
+    .first().click({force:true});
+    cy.get('.oxd-dialog-container-default--inner > .oxd-sheet').should('be.visible');
+    cy.get('.oxd-button--label-danger').click();
+  })
 })
 
-// createNewUser(Firstname, Lastname, username, password, cnfrmpassword) {
-//   cy.get('.orangehrm-header-container > .oxd-button').click();
-//   cy.get('.--name-grouped-field > :nth-child(1) > :nth-child(2) > .oxd-input').type(Firstname);
-//   cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').type(Lastname);
-//   cy.get('.oxd-switch-input').click();
-//   cy.get(':nth-child(4) > .oxd-grid-2 > :nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-input').type(username);
-//   cy.get('.user-password-cell > .oxd-input-group > :nth-child(2) > .oxd-input').type(password);
-//   cy.get('.oxd-grid-2 > :nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').type(cnfrmpassword);
-//   cy.get('button').contains('Save').click();
-//   cy.get('.oxd-toast').should('be.visible').and('contain', 'Success');//assertion
-// }
-
-// class Example1{
-
-//   getsidePanel(){
-//       return cy.get('[aria-label="Sidepanel"]')
-//   }
-//   getpageHeading(){
-//       return cy.get('.oxd-topbar-header-breadcrumb')
-//   }
-  
-// }
-
-// export default Example1;
-
-// var firstName = '';
-// var lastName = '';
-// cy.wait(3000);
-// cy.get('.orangehrm-edit-employee-name > .oxd-text').then($value =>{
-//   var newusername = $value.text();
-//   newusername = newusername.split(' ');
-//   firstName = newusername[0];
-//   lastName = newusername[1];
-// });
-// cy.wait(3000);
-// cy.get('.--name-grouped-field > :nth-child(1) > :nth-child(2) > .oxd-input').then($value => {
-//   var val = $value.val()
-//   expect(val).to.eq(firstName);
-// });
-
-// cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
-//   var val = $value.val()
-//   expect(val).to.eq(lastName);
-// });
-
-// createNewUserAsADMIN(hint, option, username, password, cnfrmpassword) {
-//   cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[2]/div[1]/button[1]").click({ force: true });
-//   cy.get('div[class="oxd-select-text-input"]').contains('Select').click({ force: true });
-//   cy.get('div[role = "listbox"]').contains('Admin').click();
-//   cy.get('.oxd-autocomplete-text-input > input').type(hint);
-//   cy.get('div[role = "listbox"]').contains(option).click();
-//   cy.get('div[class="oxd-select-text-input"]').contains('Select').click({ force: true });
-//   cy.get('div[role = "listbox"]').contains('Enabled').click();
-//   cy.get(':nth-child(4) > .oxd-input-group > :nth-child(2) > .oxd-input').type(username);
-//   cy.get('.user-password-cell > .oxd-input-group > :nth-child(2) > .oxd-input').type(password);
-//   cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').type(cnfrmpassword);
-//   cy.get('.oxd-button--secondary').click();
-// }
-
-// SearchandDeleteAdminorUser(username) {
-//   cy.get(':nth-child(2) > .oxd-input').type(username);
-//   cy.get('button[type="submit"]').click({ force: true });
-//   cy.wait(2000);
-//   // cy.get('.oxd-table-card > .oxd-table-row').should('be.visible');//assertion
-//   cy.get('.oxd-table-cell-actions > :nth-child(1) > .oxd-icon').first().click({ force: true });
-//   cy.wait(3000);
-//   cy.get('.oxd-sheet').should('be.visible');
-//   cy.get('.oxd-button--label-danger').click();
-
-// }
-
-// login(username, password) {
-//   cy.get('h5').should('contain.text', 'Login');
-//   cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').type(username);
-//   cy.get(':nth-child(3) > .oxd-input-group > :nth-child(2) > .oxd-input').type(password);
-//   cy.get('.oxd-button').click();
-//   cy.get('nav[class="oxd-navbar-nav"]').should('be.visible');
-
-
-// }

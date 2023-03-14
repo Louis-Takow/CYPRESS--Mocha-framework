@@ -78,6 +78,7 @@ class OrangePageObjects{
     cy.get('.oxd-sheet').should('be.visible');
     cy.get('.oxd-button--label-danger').click();
     }
+   
   }
   
   export default OrangePageObjects;

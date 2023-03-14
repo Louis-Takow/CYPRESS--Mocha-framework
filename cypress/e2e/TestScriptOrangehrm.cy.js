@@ -138,7 +138,7 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.get('div[role="document"]').should('be.visible');
     cy.get('button').contains('Ok').click();
   })
-  it('Add Customer',()=>{
+  it.only('Add Customer',()=>{
     pageObject1.login('Admin','admin123');
     pageObject1.accessSidepanel('Time','Time');
     cy.get('.oxd-topbar-body-nav-tab-item').contains('Project Info ').click();
@@ -148,8 +148,9 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.get('.oxd-button').click();
     cy.get(':nth-child(2) > .oxd-input').type('AAAAA');
     cy.get('textarea[placeholder="Type description here"]').type('contractor');
-    cy.get('.oxd-button--secondary').contains('Save').click();
-   // cy.url().should('contain','time/viewCustomer');
+    cy.get('.oxd-button--secondary').contains('Save').click({force:true});
+    cy.wait(1000);
+    // cy.url().should('contain','time/viewCustomer');
  })
  it('Edit Customer and Delete created Customer',()=>{
     

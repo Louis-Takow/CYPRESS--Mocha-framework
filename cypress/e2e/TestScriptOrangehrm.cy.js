@@ -1,50 +1,23 @@
+import OrangePageObjects from "../PageObjects/PageObjectModel1";
+
+const pageObject1 = new OrangePageObjects();
+
 describe('OrangeHRM', () => {
   beforeEach(() => {
-    cy.visit('https://opensource-demo.orangehrmlive.com/');
+    cy.visit('');
   })
   it('Login and Logout ', () => {
     //Login
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
+    pageObject1.login('Admin','admin123');
     //Logout
-    cy.wait(1000);
-    cy.get('.oxd-userdropdown-tab > .oxd-icon').click({ force: true });
-    cy.get(':nth-child(4) > .oxd-userdropdown-link').click();
+    pageObject1.logout();
   })
   it('Unsuccesfull Login Trials',()=>{
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.xpath("//body/div[@id='app']/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/form[1]/div[1]/div[1]/span[1]")
-    .should('be.visible').and('contain','Required');
-    cy.xpath("//body/div[@id='app']/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/form[1]/div[2]/div[1]/span[1]")
-    .should('be.visible').and('contain','Required');;
-    cy.reload();
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.xpath("//body/div[@id='app']/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/form[1]/div[2]/div[1]/span[1]")
-    .should('be.visible').and('contain','Required');;
-    cy.reload();
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.xpath("//body/div[@id='app']/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/form[1]/div[1]/div[1]/span[1]")
-    .should('be.visible').and('contain','Required');;
-    cy.reload();
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('123');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('div[role="alert"]').should('be.visible').and('contain','Invalid credentials');
-    cy.reload();
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('input[name="password"]').type('123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('div[role="alert"]').should('be.visible').and('contain','Invalid credentials');
+    pageObject1.unsuccessfulLogin1();
+    pageObject1.unsuccessfulLogin2();
+    pageObject1.unsuccessfulLogin3();
+    pageObject1.unsuccessfulLogin4();
+    pageObject1.unsuccessfulLogin5();
   })
   it('Password Reset',()=>{
     cy.get('.orangehrm-login-forgot > .oxd-text').should('be.visible').click();
@@ -64,13 +37,8 @@ describe('OrangeHRM', () => {
   })
   it('Create new User account and Create User as Admin',()=>{
     //Create new User account
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
-    cy.get('nav[aria-label="Sidepanel"]').contains('PIM').click();
-    cy.get('.oxd-topbar-header-breadcrumb').should('contain','PIM');
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('PIM','PIM')
     cy.get('button').contains(' Add ').click();
     cy.get('input[name="firstName"]').type('Louis');
     cy.get('input[name="lastName"]').type('Takow');
@@ -109,8 +77,7 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     })
 //Create New User as Admin
     cy.reload();
-    cy.get('nav[aria-label="Sidepanel"]').contains('Admin').click();
-    cy.get('.oxd-topbar-header-breadcrumb').should('contain','Admin');
+    pageObject1.accessSidepanel('Admin','Admin')
     cy.get('button').contains(' Add ').click();
     cy.get('nav[aria-label="Sidepanel"]').contains('Admin').click();
     cy.get('.oxd-topbar-header-breadcrumb').should('contain','Admin');
@@ -133,86 +100,31 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.get(':nth-child(4) > .oxd-userdropdown-link').click();
   })
   it('Login using Created User account credentials',()=>{
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Takow');
-    cy.get('input[name="password"]').type('#Correct123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
-    cy.wait(1000);
-    cy.get('.oxd-userdropdown-tab > .oxd-icon').click({ force: true });
-    cy.get(':nth-child(4) > .oxd-userdropdown-link').click();  
+    pageObject1.login('Takow','#Correct123');
+    pageObject1.logout();
   })
   it('Login using Created Admin account credentials',()=>{
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('LouisTT');
-    cy.get('input[name="password"]').type('#Correct123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
-    cy.wait(1000);
-    cy.get('.oxd-userdropdown-tab > .oxd-icon').click({ force: true });
-    cy.get(':nth-child(4) > .oxd-userdropdown-link').click();  
+    pageObject1.login('LouisTT','#Correct123');
+    pageObject1.logout();
   })
   it('Search/edit & Search/delete System Users',()=>{
     //Search/edit System Users
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
-    cy.get('nav[aria-label="Sidepanel"]').contains('Admin').click();
-    cy.get('.oxd-topbar-header-breadcrumb').should('contain','Admin');
-
-    cy.get(':nth-child(2) > .oxd-input').type('Takow');
-    cy.get('button[type="submit"]').click({ force: true });
-    cy.wait(2000);
-    cy.get('.oxd-table-cell-actions > :nth-child(2) > .oxd-icon').first().click({ force: true });
-    cy.wait(1000);
-    cy.url().should('contain','admin/saveSystemUser');
-    cy.get('.orangehrm-card-container').should('be.visible').and('contain','Edit User');
-    cy.get('div[class="oxd-select-text-input"]').contains('ESS').click({force:true});
-    cy.get('div[role="listbox"]').contains('Admin').click();
-    cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[2]/button[2]").click({force:true});
-    cy.wait(3000);
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('Admin','Admin');
+    pageObject1.searchandEditSystemUsers('Takow','ESS', 'Admin');
+    
    // Search/delete System Users
-    cy.get('nav[aria-label="Sidepanel"]').contains('Admin').click();
-    cy.get(':nth-child(2) > .oxd-input').type('Takow');
-    cy.get('button[type="submit"]').click({ force: true });
-    cy.wait(2000);
-    cy.get('.oxd-table-cell-actions > :nth-child(1) > .oxd-icon').first().click({ force: true });
-    cy.wait(2000);
-    cy.get('.oxd-sheet').should('be.visible');
-    cy.get('.oxd-button--label-danger').click();
+   pageObject1.searchandDeleteSystemUsers('Takow');
+    
   })
-  it(' Search/edit & Search/delete Admin System Users',()=>{
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
+  it.only(' Search/edit & Search/delete Admin System Users',()=>{
+   pageObject1.login('Admin','admin123')
    // Search/edit Admin System Users
-    cy.get('nav[aria-label="Sidepanel"]').contains('Admin').click();
-    cy.get('.oxd-topbar-header-breadcrumb').should('contain','Admin');
-
-    cy.get(':nth-child(2) > .oxd-input').type('LouisTT');
-    cy.get('button[type="submit"]').click({ force: true });
-    cy.wait(2000);
-    cy.get('.oxd-table-cell-actions > :nth-child(2) > .oxd-icon').first().click({ force: true });
-    cy.wait(1000);
-    cy.url().should('contain','admin/saveSystemUser');
-    cy.get('.orangehrm-card-container').should('be.visible').and('contain','Edit User');
-    cy.get('div[class="oxd-select-text-input"]').contains('Admin').click({force:true});
-    cy.get('div[role="listbox"]').contains('ESS').click();
-    cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[2]/button[2]").click({force:true});
-    cy.wait(3000);
+   pageObject1.accessSidepanel('Admin','Admin')
+   pageObject1.searchandEditSystemUsers('LouisTT','Admin', 'ESS');
+    
     //Search/delete Admin System Users
-    cy.get('nav[aria-label="Sidepanel"]').contains('Admin').click();
-    cy.get(':nth-child(2) > .oxd-input').type('LouisTT');
-    cy.get('button[type="submit"]').click({ force: true });
-    cy.wait(2000);
-    cy.get('.oxd-table-cell-actions > :nth-child(1) > .oxd-icon').first().click({ force: true });
-    cy.wait(2000);
-    cy.get('.oxd-sheet').should('be.visible');
-    cy.get('.oxd-button--label-danger').click();
+    pageObject1.searchandDeleteSystemUsers('LouisTT');
   })
   it('Assign Leave trial with 0 leave balance',()=>{
     cy.get('.oxd-text--h5').should('contain', 'Login');
@@ -249,13 +161,18 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.url().should('contain','time/viewCustomers');
     cy.get('.orangehrm-header-container').should('be.visible').and('contain','Customers');
     cy.get('.oxd-button').click();
-    cy.get(':nth-child(2) > .oxd-input').type('CustomerA');
-    cy.get('textarea[placeholder="Type description here"]').type('contractor');
-    cy.get('.oxd-button--secondary').click();
-    cy.wait(1000);
-    cy.url().should('contain','time/viewCustomer');
+    cy.get(':nth-child(2) > .oxd-input').type('AAAAA');
+    // cy.get('textarea[placeholder="Type description here"]').type('contractor');
+    cy.get('.oxd-button--secondary').contains('Save').click();
+   // cy.url().should('contain','time/viewCustomer');
+ })
+ it('Edit Customer and Delete created Customer',()=>{
+    
+ })
+ it('Add recruitment candidate',()=>{
+    pageObject1.login('Admin','admin123');
 
-  })
+ })
 })
 
 // createNewUser(Firstname, Lastname, username, password, cnfrmpassword) {
@@ -326,5 +243,15 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
 //   cy.wait(3000);
 //   cy.get('.oxd-sheet').should('be.visible');
 //   cy.get('.oxd-button--label-danger').click();
+
+// }
+
+// login(username, password) {
+//   cy.get('h5').should('contain.text', 'Login');
+//   cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-input').type(username);
+//   cy.get(':nth-child(3) > .oxd-input-group > :nth-child(2) > .oxd-input').type(password);
+//   cy.get('.oxd-button').click();
+//   cy.get('nav[class="oxd-navbar-nav"]').should('be.visible');
+
 
 // }

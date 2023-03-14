@@ -53,7 +53,7 @@ describe('OrangeHRM', () => {
     cy.wait(3000);
     cy.url().should('contain','pim/viewPersonalDetails');
     cy.get('.orangehrm-card-container').should('contain','Personal Details');
-  
+  //Assertion that created profile User name = firstname + lastname
  var firstName = '';
  var lastName = '';
 cy.wait(3000);
@@ -92,9 +92,7 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.wait(1000);
     cy.url().should('contain','admin/viewSystemUser');
 
-    cy.wait(1000);
-    cy.get('.oxd-userdropdown-tab > .oxd-icon').click({ force: true });
-    cy.get(':nth-child(4) > .oxd-userdropdown-link').click();
+    pageObject1.logout();
   })
   it('Login using Created User account credentials',()=>{
     pageObject1.login('Takow','#Correct123');
@@ -105,8 +103,8 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     pageObject1.logout();
   })
   it('Search/edit & Search/delete System Users',()=>{
-    //Search/edit System Users
     pageObject1.login('Admin','admin123');
+    //Search/edit System Users
     pageObject1.accessSidepanel('Admin','Admin');
     pageObject1.searchandEditSystemUsers('Takow','ESS', 'Admin');
     
@@ -124,13 +122,8 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     pageObject1.searchandDeleteSystemUsers('LouisTT');
   })
   it('Assign Leave trial with 0 leave balance',()=>{
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type('Admin');
-    cy.get('input[name="password"]').type('admin123');
-    cy.get('button').contains('Login').should('be.visible').click();
-    cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
-    cy.get('nav[aria-label="Sidepanel"]').contains('Leave').click();
-    cy.get('.oxd-topbar-header-breadcrumb').should('contain','Leave');
+    pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('Leave','Leave');
     cy.get(':nth-child(6) > .oxd-topbar-body-nav-tab-item > .oxd-icon').click({force:true});
     cy.get(':nth-child(2) > li > .oxd-topbar-body-nav-tab-link').click({force:true})
     cy.get('.oxd-autocomplete-text-input > input').type('Pet');
@@ -224,14 +217,14 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.get('.oxd-dialog-container-default--inner > .oxd-sheet').should('be.visible');
     cy.get('.oxd-button--label-danger').click();
   })
-  it.only('Comment on post',()=>{
+  it('Comment on post',()=>{
     pageObject1.login('Admin','admin123');
     pageObject1.accessSidepanel('Buzz','Buzz');
     cy.get(':nth-child(1) > .oxd-sheet > .orangehrm-buzz-post-footer > .orangehrm-buzz-post-actions > :nth-child(2) > .oxd-icon')
     .click({force:true});
     cy.get('input[placeholder="Write your comment..."]').type('Great!!!!').type('{enter}');
   })
-  it.only('Edit and Delete posted comment',()=>{
+  it('Edit and Delete posted comment',()=>{
     pageObject1.login('Admin','admin123');
     pageObject1.accessSidepanel('Buzz','Buzz');
     //Edit Posted Comment

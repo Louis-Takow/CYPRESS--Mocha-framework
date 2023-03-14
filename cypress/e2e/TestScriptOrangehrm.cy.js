@@ -50,13 +50,13 @@ describe('OrangeHRM', () => {
     cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[4]/div[1]/div[2]/div[1]/div[2]/input[1]")
     .type('#Correct123');
     cy.get('button').contains('Save').should('be.visible').click();
-    cy.wait(3000);
+    cy.wait(1000);
     cy.url().should('contain','pim/viewPersonalDetails');
     cy.get('.orangehrm-card-container').should('contain','Personal Details');
   //Assertion that created profile User name = firstname + lastname
  var firstName = '';
  var lastName = '';
-cy.wait(3000);
+cy.wait(1000);
 cy.get('.orangehrm-edit-employee-name > .oxd-text').then($value =>{
   var newusername = $value.text();
   newusername = newusername.split(' ');
@@ -123,11 +123,24 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
   })
   it('Assign Leave trial with 0 leave balance',()=>{
     pageObject1.login('Admin','admin123');
+    pageObject1.accessSidepanel('PIM','PIM')
+    cy.get('button').contains(' Add ').click();
+    cy.get('input[name="firstName"]').type('Andrew');
+    cy.get('input[name="lastName"]').type('Carl');
+    cy.get('.oxd-switch-input').click();
+    cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[2]/input[1]")
+    .type('Takow');
+    cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[4]/div[1]/div[1]/div[1]/div[2]/input[1]")
+    .type('#Correct123');
+    cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[4]/div[1]/div[2]/div[1]/div[2]/input[1]")
+    .type('#Correct123');
+    cy.get('button').contains('Save').should('be.visible').click();
+    cy.wait(1000);
     pageObject1.accessSidepanel('Leave','Leave');
     cy.get(':nth-child(6) > .oxd-topbar-body-nav-tab-item > .oxd-icon').click({force:true});
     cy.get(':nth-child(2) > li > .oxd-topbar-body-nav-tab-link').click({force:true})
-    cy.get('.oxd-autocomplete-text-input > input').type('Pet');
-    cy.get('div[role = "listbox"]').contains('Peter').click();
+    cy.get('.oxd-autocomplete-text-input > input').type('And');
+    cy.get('div[role = "listbox"]').contains('Andrew').click();
     cy.get('div[class="oxd-select-text-input"]').contains('Select').click({force: true});
     cy.get('div[role = "listbox"]').contains('Personal').click();
     cy.get(':nth-child(1) > .oxd-input-group > :nth-child(2) > .oxd-date-wrapper > .oxd-date-input > .oxd-input').click({force:true})
@@ -138,7 +151,7 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.get('div[role="document"]').should('be.visible');
     cy.get('button').contains('Ok').click();
   })
-  it.only('Add Customer',()=>{
+  it('Add Customer',()=>{
     pageObject1.login('Admin','admin123');
     pageObject1.accessSidepanel('Time','Time');
     cy.get('.oxd-topbar-body-nav-tab-item').contains('Project Info ').click();
@@ -146,14 +159,32 @@ cy.get(':nth-child(3) > :nth-child(2) > .oxd-input').then($value => {
     cy.url().should('contain','time/viewCustomers');
     cy.get('.orangehrm-header-container').should('be.visible').and('contain','Customers');
     cy.get('.oxd-button').click();
-    cy.get(':nth-child(2) > .oxd-input').type('AAAAA');
+    cy.get(':nth-child(2) > .oxd-input').type('AAAAF');
     cy.get('textarea[placeholder="Type description here"]').type('contractor');
+    cy.wait(1000);
     cy.get('.oxd-button--secondary').contains('Save').click({force:true});
     cy.wait(1000);
-    // cy.url().should('contain','time/viewCustomer');
+    cy.url().should('contain','time/viewCustomer');
  })
  it('Edit Customer and Delete created Customer',()=>{
-    
+  pageObject1.login('Admin','admin123');
+  pageObject1.accessSidepanel('Time','Time');
+  //Edit Customer
+  cy.get('.oxd-topbar-body-nav-tab-item').contains('Project Info ').click();
+  cy.get('ul[role="menu"]').contains('Customers').click();
+  cy.url().should('contain','time/viewCustomers');
+  cy.get(':nth-child(1) > .oxd-table-row > [style="flex: 1 1 0%;"] > .oxd-table-cell-actions > :nth-child(2) > .oxd-icon')
+  .first().click({force:true});
+  cy.url().should('contain','time/addCustomer');
+  cy.get('.orangehrm-card-container').should('be.visible').and('contain','Edit Customer');
+  cy.get(':nth-child(2) > .oxd-input').clear().type('aaaaaab');
+  cy.wait(1000);
+  cy.get('.oxd-button--secondary').click();
+  //Delete Customer
+  cy.get(':nth-child(1) > .oxd-table-row > [style="flex: 1 1 0%;"] > .oxd-table-cell-actions > :nth-child(1) > .oxd-icon')
+  .first().click({force:true});
+  cy.get('.oxd-sheet').should('be.visible');
+  cy.get('.oxd-button--label-danger').click();
  })
  it('Add recruitment candidate',()=>{
     pageObject1.login('Admin','admin123');

@@ -78,24 +78,7 @@ class OrangePageObjects{
     cy.get('.oxd-sheet').should('be.visible');
     cy.get('.oxd-button--label-danger').click();
     }
-    createnewuser(){
-      pageObject1.accessSidepanel('PIM','PIM')
-      cy.get('button').contains(' Add ').click();
-      cy.get('input[name="firstName"]').type('Louis');
-      cy.get('input[name="lastName"]').type('Takow');
-      cy.get('.oxd-switch-input').click();
-      cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[2]/input[1]")
-      .type('Takow');
-      cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[4]/div[1]/div[1]/div[1]/div[2]/input[1]")
-      .type('#Correct123');
-      cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[4]/div[1]/div[2]/div[1]/div[2]/input[1]")
-      .type('#Correct123');
-      cy.get('button').contains('Save').should('be.visible').click();
-      cy.wait(1000);
-      cy.url().should('contain','pim/viewPersonalDetails');
-      cy.get('.orangehrm-card-container').should('contain','Personal Details');
-      }
-     
+
   }
   
   export default OrangePageObjects;

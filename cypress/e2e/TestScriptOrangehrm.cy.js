@@ -10,7 +10,7 @@ describe('OrangeHRM', () => {
       userDetails = data;
     });
   })
-  it('Login and Logout ', () => {
+  it.only('Login and Logout ', () => {
     //Login
     pageObject1.login(userDetails.defaultUsername, userDetails.defaultPassword);
     //Logout

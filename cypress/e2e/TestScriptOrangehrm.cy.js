@@ -10,7 +10,7 @@ describe('OrangeHRM', () => {
       userDetails = data;
     });
   })
-  it.only('Login and Logout ', () => {
+  it('Login and Logout ', () => {
     //Login
     pageObject1.login(userDetails.defaultUsername, userDetails.defaultPassword);
     //Logout
@@ -93,7 +93,7 @@ describe('OrangeHRM', () => {
     //Search/delete Admin System Users
     pageObject1.searchandDeleteSystemUsers(userDetails.createdAdminUsername);
   })
-  it('Assign Leave trial with 0 leave balance', () => {
+  it.only('Assign Leave trial with 0 leave balance', () => {
     pageObject1.login(userDetails.defaultUsername, userDetails.defaultPassword);
     pageObject1.accessSidepanel('PIM', 'PIM');
     pageObject1.createNewUser(userDetails.fisrtName, userDetails.lastName, userDetails.createdUsername, userDetails.createdPassword);

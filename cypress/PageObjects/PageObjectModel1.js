@@ -1,15 +1,15 @@
 class OrangePageObjects{
   login(username, password) {
-    cy.get('.oxd-text--h5').should('contain', 'Login');
-    cy.get('input[name="username"]').type(username);
+    cy.get('.oxd-text--h5').should('contain', 'Login'); //class locator and assertion
+    cy.get('input[name="username"]').type(username); //CSS Selector(tag+attribute)
     cy.get('input[name="password"]').type(password);
-    cy.get('button').contains('Login').should('be.visible').click();
+    cy.get('button').contains('Login').should('be.visible').click();//tag and text
     cy.get('nav[aria-label="Sidepanel"]').should('be.visible');
     }
     logout(){
     cy.wait(1000);
     cy.get('.oxd-userdropdown-tab > .oxd-icon').click({ force: true });
-    cy.get(':nth-child(4) > .oxd-userdropdown-link').click();
+    cy.get(':nth-child(4) > .oxd-userdropdown-link').click(); //class + nth child
     }
     unsuccessfulLogin1(){
     cy.get('.oxd-text--h5').should('contain', 'Login');
@@ -213,7 +213,7 @@ class OrangePageObjects{
     commentOnPost(comment){
     cy.get(':nth-child(1) > .oxd-sheet > .orangehrm-buzz-post-footer > .orangehrm-buzz-post-actions > :nth-child(2) > .oxd-icon')
     .click({force:true});
-    cy.get('input[placeholder="Write your comment..."]').type(comment).type('{enter}');
+    cy.get('input[placeholder="Write your comment..."]').type(comment).type('{enter}');//Press enter key
     }
     editandDeletePostedComment(editedcomment){
     //Edit Posted Comment
@@ -221,7 +221,7 @@ class OrangePageObjects{
     .click({force:true});
     cy.get('.orangehrm-post-comment-action-area > :nth-child(2)').first().click({force:true});
     cy.get('.orangehrm-post-comment > .oxd-form > .oxd-input-group > :nth-child(2) > .oxd-input')
-    .clear().type(editedcomment).type('{enter}');
+    .clear().type(editedcomment).type('{enter}');// Press enter key
     //Delete Posted Comment
     cy.get(':nth-child(3) > .orangehrm-post-comment > .orangehrm-post-comment-action-area > :nth-child(3)')
     .first().click({force:true});

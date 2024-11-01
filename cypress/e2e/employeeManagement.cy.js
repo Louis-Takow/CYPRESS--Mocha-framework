@@ -47,9 +47,9 @@ describe('Employee management - OrangeHRM', () => {
     pimPage.getUsernameField().type(randomUsername);
     pimPage.getPasswordField().type(userInput.newPassword);
     pimPage.getConfirmPasswordField().type(userInput.newPassword);
-    pimPage.getSaveButton().click();
+    pimPage.getSaveButton1().click();
     cy.wait(1000);
-    pimPage.getSaveButton().first().click();
+    pimPage.getSaveButton2().click();
     
   })
 

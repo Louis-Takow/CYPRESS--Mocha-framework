@@ -1,7 +1,7 @@
 /// <reference types="cypress" />
 class PIMPage{
    
-    getAddButton(category){
+    getAddButton(){
         return cy.get('button').contains(' Add ');
     }
 
@@ -29,8 +29,12 @@ class PIMPage{
         return cy.xpath("//body/div[@id='app']/div[1]/div[2]/div[2]/div[1]/div[1]/form[1]/div[1]/div[2]/div[4]/div[1]/div[2]/div[1]/div[2]/input[1]");
     }
 
-    getSaveButton(){
+    getSaveButton1(){
         return cy.get('button').contains('Save');
+    }
+
+    getSaveButton2(){
+        return cy.get("div[class='orangehrm-horizontal-padding orangehrm-vertical-padding'] button[type='submit']");
     }
 }
 export default PIMPage;

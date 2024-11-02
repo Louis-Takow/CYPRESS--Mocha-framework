@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Louis Takow",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^12.7.0",
